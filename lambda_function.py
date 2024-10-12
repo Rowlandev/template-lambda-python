@@ -8,7 +8,7 @@ from aws_lambda_powertools.utilities.idempotency import (DynamoDBPersistenceLaye
 # The benefit of this approach is even more evident when you make database connections from Lambda Functions.
 # Your clients/database will thank you later. As will your wallet.
 dynamo_client = client('dynamodb')
-result_table_name = 'idemotent-results'
+result_table_name = '<whatever you wish to call your table for execution results>'
 
 # https://docs.powertools.aws.dev/lambda/dotnet/utilities/idempotency/
 # The value doesn't matter; it just needs to reference an existing DynamoDB table.
@@ -53,6 +53,8 @@ def lambda_handler(event, context):
         request = [event, context]
         meta_print(request)
 
+        config.register_lambda_context(context)  # You'll need this for idempotency to not give you a warning. Or a howler.
+
         records = event.get('Records') or []
         for record in records:
             process(record=record)  # Make sure you pass the argument by name for idempotency to work properly.
@@ -65,10 +67,3 @@ def lambda_handler(event, context):
     print(message)
 
     return message
-
-
-lambda_handler({
-    'Records': [
-        {'name': 'chase'}
-    ]
-}, {})

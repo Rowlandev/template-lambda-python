@@ -1,0 +1,9 @@
+# Typically from using finder on Mac OS
+*.DS_Store
+
+# JetBrains IDE settings
+.idea
+
+# The cache can bite ya if you're not careful
+__pycache__
+*.pyc
